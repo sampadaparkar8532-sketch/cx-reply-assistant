@@ -1,5 +1,8 @@
+```javascript
+const API_URL = import.meta.env.VITE_API_URL;
+
 async function request(url, options = {}) {
-  const response = await fetch(url, {
+  const response = await fetch(`${API_URL}${url}`, {
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {})
@@ -18,37 +21,52 @@ async function request(url, options = {}) {
 
 export const api = {
   brands: () => request("/api/brands"),
+
   conversations: () => request("/api/conversations"),
-  conversation: (id) => request(`/api/conversations/${id}`),
+
+  conversation: (id) =>
+    request(`/api/conversations/${id}`),
+
   sendMessage: (id, body) =>
     request(`/api/conversations/${id}/messages`, {
       method: "POST",
       body: JSON.stringify(body)
     }),
-  knowledge: (brandId) => request(`/api/brands/${brandId}/knowledge`),
+
+  knowledge: (brandId) =>
+    request(`/api/brands/${brandId}/knowledge`),
+
   createKnowledge: (brandId, body) =>
     request(`/api/brands/${brandId}/knowledge`, {
       method: "POST",
       body: JSON.stringify(body)
     }),
+
   updateKnowledge: (id, body) =>
     request(`/api/knowledge/${id}`, {
       method: "PUT",
       body: JSON.stringify(body)
     }),
+
   deleteKnowledge: (id) =>
-    request(`/api/knowledge/${id}`, { method: "DELETE" }),
+    request(`/api/knowledge/${id}`, {
+      method: "DELETE"
+    }),
+
   generate: (conversationId) =>
     request(`/api/conversations/${conversationId}/generate-reply`, {
       method: "POST"
     }),
+
   regenerate: (generationId) =>
     request(`/api/ai/${generationId}/regenerate`, {
       method: "POST"
     }),
+
   approve: (generationId, final_response) =>
     request(`/api/ai/${generationId}/approve`, {
       method: "POST",
       body: JSON.stringify({ final_response })
     })
 };
+```
