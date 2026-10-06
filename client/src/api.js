@@ -1,8 +1,7 @@
-```javascript
 const API_URL = import.meta.env.VITE_API_URL;
 
 async function request(url, options = {}) {
-  const response = await fetch(`${API_URL}${url}`, {
+  const response = await fetch(API_URL + url, {
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {})
@@ -25,48 +24,50 @@ export const api = {
   conversations: () => request("/api/conversations"),
 
   conversation: (id) =>
-    request(`/api/conversations/${id}`),
+    request("/api/conversations/" + id),
 
   sendMessage: (id, body) =>
-    request(`/api/conversations/${id}/messages`, {
+    request("/api/conversations/" + id + "/messages", {
       method: "POST",
       body: JSON.stringify(body)
     }),
 
   knowledge: (brandId) =>
-    request(`/api/brands/${brandId}/knowledge`),
+    request("/api/brands/" + brandId + "/knowledge"),
 
   createKnowledge: (brandId, body) =>
-    request(`/api/brands/${brandId}/knowledge`, {
+    request("/api/brands/" + brandId + "/knowledge", {
       method: "POST",
       body: JSON.stringify(body)
     }),
 
   updateKnowledge: (id, body) =>
-    request(`/api/knowledge/${id}`, {
+    request("/api/knowledge/" + id, {
       method: "PUT",
       body: JSON.stringify(body)
     }),
 
   deleteKnowledge: (id) =>
-    request(`/api/knowledge/${id}`, {
+    request("/api/knowledge/" + id, {
       method: "DELETE"
     }),
 
   generate: (conversationId) =>
-    request(`/api/conversations/${conversationId}/generate-reply`, {
-      method: "POST"
-    }),
+    request(
+      "/api/conversations/" + conversationId + "/generate-reply",
+      {
+        method: "POST"
+      }
+    ),
 
   regenerate: (generationId) =>
-    request(`/api/ai/${generationId}/regenerate`, {
+    request("/api/ai/" + generationId + "/regenerate", {
       method: "POST"
     }),
 
   approve: (generationId, final_response) =>
-    request(`/api/ai/${generationId}/approve`, {
+    request("/api/ai/" + generationId + "/approve", {
       method: "POST",
       body: JSON.stringify({ final_response })
     })
 };
-```
