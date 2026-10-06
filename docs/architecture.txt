@@ -1,0 +1,41 @@
+ARCHITECTURE DIAGRAM
+
+Agent Browser
+      |
+      v
+React / Vite Frontend
+      |
+      | REST API
+      v
+Node.js / Express Backend
+      |
+      +----------------------+
+      |                      |
+      v                      v
+    MySQL               AI Service
+      |                 OpenRouter
+      |
+      +-- Brands
+      +-- Customers
+      +-- Orders
+      +-- Conversations
+      +-- Messages
+      +-- Knowledge Base
+      +-- AI Generation Logs
+
+Knowledge retrieval is currently MySQL keyword-based and always filtered by brand_id.
+
+Scale-up:
+React -> Load Balancer -> Node API instances
+                         |
+                         +-> MySQL/PostgreSQL
+                         +-> Redis cache
+                         +-> Queue -> AI workers -> LLM
+                         +-> Qdrant vector retrieval
+
+Reliability:
+- Idempotent webhook event IDs
+- Timeout + bounded retry
+- AI failure fallback
+- Pending/sent/failed message state
+- Brand-level authorization
